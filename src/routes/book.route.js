@@ -10,7 +10,7 @@ router.post('/', authenticate, authorizeRoles('admin'), async (req, res) => {
         const { error } = createBookSchema.validate(req.body);
         if (error) return res.status(400).json({ message: error.details[0].message });
         const book = await BookService.createBook(req.body, req.user.userId);
-        res.status(201).json(book);
+        res.status(201).json({ message: 'Book created successfully', book });
     } catch (err) {
         res.status(err.status || 500).json({ message: err.message || 'Server error' });
     }
@@ -22,7 +22,7 @@ router.put('/:id', authenticate, authorizeRoles('admin'), async (req, res) => {
         const { error } = updateBookSchema.validate(req.body);
         if (error) return res.status(400).json({ message: error.details[0].message });
         const book = await BookService.updateBook(req.params.id, req.body);
-        res.json(book);
+        res.json({ message: 'Book updated successfully', book });
     } catch (err) {
         res.status(err.status || 500).json({ message: err.message || 'Server error' });
     }
@@ -32,7 +32,7 @@ router.put('/:id', authenticate, authorizeRoles('admin'), async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const books = await BookService.getAllBooks();
-        res.json(books);
+        res.json({ message: 'Books fetched successfully', books });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
     }
@@ -43,7 +43,7 @@ router.get('/:id', async (req, res) => {
     try {
         const book = await BookService.getBookById(req.params.id);
         if (!book) return res.status(404).json({ message: 'Book not found' });
-        res.json(book);
+        res.json({ message: 'Book fetched successfully', book });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
     }
@@ -54,7 +54,7 @@ router.delete('/:id', authenticate, authorizeRoles('admin'), async (req, res) =>
     try {
         const book = await BookService.deleteBook(req.params.id);
         if (!book) return res.status(404).json({ message: 'Book not found' });
-        res.json({ message: 'Book deleted successfully' });
+        res.json({ message: 'Book deleted successfully', book });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
     }
