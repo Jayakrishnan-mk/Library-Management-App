@@ -101,6 +101,3 @@ project-root/
 - All responses include a `message` field for clarity.
 
 ---
-
-## License
-MIT
